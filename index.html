@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ResumeAI — Universe</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+
+            background:
+                radial-gradient(circle at 20% 20%, rgba(35, 100, 255, 0.25), transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(85, 45, 255, 0.22), transparent 35%),
+                linear-gradient(135deg, #020617, #061338 50%, #020617);
+        }
+
+        .stars,
+        .stars::before,
+        .stars::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+
+            background-image:
+                radial-gradient(circle, white 1px, transparent 1px),
+                radial-gradient(circle, #7dd3fc 1px, transparent 1px);
+
+            background-size: 90px 90px, 140px 140px;
+            background-position: 10px 20px, 50px 80px;
+
+            opacity: 0.35;
+            z-index: -1;
+        }
+
+        .stars::before {
+            transform: scale(1.4);
+            opacity: 0.15;
+        }
+
+        nav {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8%;
+
+            background: rgba(2, 6, 23, 0.55);
+            border-bottom: 1px solid rgba(96, 165, 250, 0.15);
+            backdrop-filter: blur(15px);
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: #38bdf8;
+            text-shadow: 0 0 18px #0ea5e9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+        }
+
+        .nav-links a:hover {
+            color: #7dd3fc;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 80px 20px 35px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 9px 18px;
+            border-radius: 30px;
+
+            color: #7dd3fc;
+
+            background: rgba(14, 165, 233, 0.08);
+            border: 1px solid rgba(56, 189, 248, 0.25);
+
+            box-shadow: 0 0 25px rgba(14, 165, 233, 0.12);
+
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-size: 58px;
+            line-height: 1.08;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: #38bdf8;
+
+            text-shadow:
+                0 0 15px rgba(56, 189, 248, 0.5),
+                0 0 40px rgba(37, 99, 235, 0.3);
+        }
+
+        .hero p {
+            color: #94a3b8;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .upload-area {
+            width: 720px;
+            max-width: 90%;
+            margin: 35px auto;
+        }
+
+        .upload-box {
+            padding: 60px 30px;
+            text-align: center;
+
+            border-radius: 28px;
+
+            background: rgba(15, 23, 42, 0.55);
+
+            border: 1px solid rgba(96, 165, 250, 0.25);
+
+            backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 0 50px rgba(37, 99, 235, 0.12),
+                inset 0 0 30px rgba(59, 130, 246, 0.03);
+
+            transition: 0.4s;
+        }
+
+        .upload-box:hover {
+            transform: translateY(-7px);
+
+            border-color: rgba(56, 189, 248, 0.7);
+
+            box-shadow:
+                0 0 60px rgba(14, 165, 233, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 58px;
+            margin-bottom: 20px;
+
+            filter:
+                drop-shadow(0 0 15px rgba(56, 189, 248, 0.7));
+        }
+
+        .upload-box h2 {
+            font-size: 24px;
+            margin-bottom: 12px;
+        }
+
+        .upload-box p {
+            color: #64748b;
+            margin-bottom: 28px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .upload-btn {
+            display: inline-block;
+
+            padding: 14px 30px;
+
+            border-radius: 14px;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            background: linear-gradient(
+                135deg,
+                #2563eb,
+                #06b6d4
+            );
+
+            box-shadow:
+                0 0 25px rgba(37, 99, 235, 0.35);
+
+            transition: 0.3s;
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.06);
+
+            box-shadow:
+                0 0 35px rgba(56, 189, 248, 0.55);
+        }
+
+        .features {
+            width: 90%;
+            max-width: 1100px;
+
+            margin: 55px auto 80px;
+
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 22px;
+        }
+
+        .card {
+            padding: 28px;
+
+            border-radius: 22px;
+
+            background: rgba(15, 23, 42, 0.5);
+
+            border: 1px solid rgba(96, 165, 250, 0.15);
+
+            backdrop-filter: blur(15px);
+
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+
+            border-color: rgba(56, 189, 248, 0.35);
+
+            box-shadow:
+                0 0 30px rgba(37, 99, 235, 0.12);
+        }
+
+        .card-icon {
+            font-size: 30px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 700px) {
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="stars"></div>
+
+    <nav>
+
+        <div class="logo">
+            Resume<span>AI</span>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#">How It Works</a>
+            <a href="#">About</a>
+        </div>
+
+    </nav>
+
+
+    <section class="hero">
+
+        <div class="badge">
+            ✦ AI-Powered Career Intelligence
+        </div>
+
+        <h1>
+            Take Your Resume<br>
+            <span>To The Next Level.</span>
+        </h1>
+
+        <p>
+            Analyze your resume with AI, discover your strengths,
+            <br>
+            and unlock better career opportunities.
+        </p>
+
+    </section>
+
+
+    <section class="upload-area">
+
+        <div class="upload-box">
+
+            <div class="upload-icon">
+                📄
+            </div>
+
+            <h2>
+                Launch Your Resume
+            </h2>
+
+            <p>
+                Upload your PDF resume and let AI analyze it
+            </p>
+
+            <form
+                action="/upload"
+                method="POST"
+                enctype="multipart/form-data"
+            >
+
+                <label
+                    for="resume"
+                    class="upload-btn"
+                >
+                    🚀 Choose Resume
+                </label>
+
+                <input
+                    type="file"
+                    id="resume"
+                    name="resume"
+                    accept=".pdf"
+                    onchange="this.form.submit()"
+                >
+
+            </form>
+
+        </div>
+
+    </section>
+
+
+    <section class="features">
+
+        <div class="card">
+
+            <div class="card-icon">
+                🎯
+            </div>
+
+            <h3>
+                ATS Score
+            </h3>
+
+            <p>
+                Understand how your resume performs
+                against Applicant Tracking Systems.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🧠
+            </div>
+
+            <h3>
+                AI Insights
+            </h3>
+
+            <p>
+                Discover your skills, strengths,
+                experience and improvement areas.
+            </p>
+
+        </div>
+
+
+        <div class="card">
+
+            <div class="card-icon">
+                🌌
+            </div>
+
+            <h3>
+                Job Matching
+            </h3>
+
+            <p>
+                Compare your resume with job descriptions
+                and discover missing skills.
+            </p>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>
